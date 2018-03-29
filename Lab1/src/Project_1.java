@@ -56,10 +56,86 @@ public class Project_1 {
     public double sineEnvelopeSineWave(ArrayList<Double> v, int d){
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
-            s += 0.5 + (Math.sin(Math.pow((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)-0.5),2)))/Math.pow((1+0.001*(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))),2);
+            s += 0.5 + Math.pow(Math.sin((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)-0.5)),2)/Math.pow((1+0.001*(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))),2);
         }
         s = -s;
         return s;
     }
 
+    // #7
+    public double stretchedVSineWave(ArrayList<Double> v, int d){
+        double s = 0.0;
+        for(int i = 0; i < d-1; i++){
+            s += (Math.pow((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)),.25)*Math.pow(Math.sin((50*Math.pow((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)),.1))),2)+1);
+        }
+        return s;
+    }
+
+    // #8
+    public double AckeysOne(ArrayList<Double> v, int d){
+        double s = 0.0;
+        for(int i = 0; i < d-1; i++){
+            s += (1/Math.pow((Math.E),.2))*Math.sqrt(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))+3*(Math.cos(2*v.get(i))+Math.sin(2*v.get(i+1)));
+        }
+        return s;
+    }
+
+    // #9
+    public double AckeysTwo(ArrayList<Double> v, int d){
+        double s = 0.0;
+        for(int i = 0; i < d-1; i++){
+            s += 20 + Math.E - (20/(Math.pow(Math.E,.2)*Math.sqrt((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))/2)))-Math.pow(Math.E,0.5*(Math.cos(2*Math.PI*v.get(i))+Math.cos(2*Math.PI*v.get(i+1))));
+        }
+        return s;
+    }
+
+    // #10
+    public double eggHolder(ArrayList<Double> v, int d){
+        double s = 0.0;
+        for(int i = 0; i < d-1; i++){
+            s += -v.get(i)*Math.sin(Math.sqrt(Math.abs(v.get(i)-v.get(i+1)-47)))-(v.get(i+1)+47)*Math.sin(Math.sqrt(Math.abs(v.get(i+1)+47+(v.get(i)/2))));
+        }
+        return s;
+    }
+
+    // #11
+    public double rana(ArrayList<Double> v, int d){
+        double s = 0.0;
+        for(int i = 0; i < d-1; i++){
+            s += v.get(i)*Math.sin(Math.sqrt(Math.abs(v.get(i+1)-v.get(i)+1)))*Math.cos(Math.sqrt(Math.abs(v.get(i+1)+v.get(i)+1)))+(v.get(i+1)+1)*Math.cos(Math.sqrt(Math.abs(v.get(i+1)-v.get(i)+1)))*Math.sin(Math.sqrt(Math.abs(v.get(i+1)+v.get(i)+1)));
+        }
+        return s;
+    }
+
+    // #12
+    public double pathological(ArrayList<Double> v, int d){
+        double s = 0.0;
+        for(int i = 0; i < d-1; i++){
+            s += 0.5 + (Math.pow(Math.sin(Math.sqrt(100*Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))),2)-0.5)/(1+0.001*Math.pow((Math.pow(v.get(i),2)-2*v.get(i)*v.get(i+1)+Math.pow(v.get(i+1),2)),2));
+        }
+        return s;
+    }
+
+    // #13
+    public double michalewicz(ArrayList<Double> v, int d){
+        double s = 0.0;
+        for(int i = 0; i < d; i++){
+            s += Math.sin(v.get(i))*Math.pow((Math.sin((i*Math.pow(v.get(i),2))/Math.PI)),10);
+        }
+        s = -s;
+        return s;
+    }
+
+    // #14
+    public double mastersCosineWave(ArrayList<Double> v, int d){
+        double s = 0.0;
+        for(int i = 0; i < d-1; i++){
+            s += Math.pow(Math.E,(-(1/8)*(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)+0.5*v.get(i+1)*v.get(i))))*Math.cos(4*Math.sqrt(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)+0.5*v.get(i+1)*v.get(i)));
+        }
+        s = -s;
+        return s;
+    }
+
+    // #15
+    // public double shekelsFoxholes(ArrayList<Double> v, int m, int n)
 }

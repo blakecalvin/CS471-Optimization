@@ -137,5 +137,57 @@ public class Project_1 {
     }
 
     // #15
-    // public double shekelsFoxholes(ArrayList<Double> v, int m, int n)
+    public double shekelsFoxholes(ArrayList<Double> v, ArrayList<Double> c, ArrayList<ArrayList<Double>> a, int m, int n){
+        double s = 0.0;
+        for(int i = 0; i < m; i++){
+            double s2 = 0.0;
+            for(int j = 0; j < n; j++){
+                ArrayList<Double> row = a.get(i);
+                s2 += Math.pow((v.get(j)-row.get(j)),2);
+            }
+            s += 1/(c.get(i)+s2);
+        }
+        s = -s;
+        return s;
+    }
 }
+
+// #1
+class schwefel implements FitnessFormula{
+
+    public double calculate(ArrayList<Double> v, int d) {
+        double s = 0.0;
+        for(int i = 0; i < d; i++){
+            s += -(v.get(i))*Math.sin(Math.sqrt(Math.abs(v.get(i))));
+        }
+        return s;
+    }
+
+    public double[] range() {
+        double[] r = {-512,512};
+        return r;
+    }
+}
+
+// #2
+class firstDeJong implements FitnessFormula{
+    
+    public double calculate(ArrayList<Double> v, int d) {
+        return 0;
+    }
+
+    public double[] range() {
+        return new double[0];
+    }
+}
+
+// #3
+
+
+// #4
+
+
+// #5
+
+
+// #6

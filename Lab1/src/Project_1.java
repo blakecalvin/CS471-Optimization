@@ -2,21 +2,76 @@
     Blake Calvin
     CS 471 - Optimization
     Project 1
-    Last Updated - 3/29/18
+    Last Updated - 3/30/18
  */
 
 import java.lang.Math;
-import java.util.*;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class Project_1 {
 
     private static final int TESTS = 30;
+    private static final int[] D = {10,20,30};
 
     public static void main(String[] args){
 
+        // Could make seperate thread for each test??
+
+        test(new Schwefel(), D);
+
+        test(new FirstDeJong(), D);
+
+        test(new Rosenbrock(), D);
+
+        test(new Rastrigin(), D);
+
+        test(new Griewangk(), D);
+
+        test(new SineEnvelopeSineWave(), D);
+
+        test(new StretchedVSineWave(), D);
+
+        test(new AckeysOne(), D);
+
+        test(new AckeysTwo(), D);
+
+        test(new EggHolder(), D);
+
+        test(new Rana(), D);
+
+        test(new Pathological(), D);
+
+        test(new Michalewicz(), D);
+
+        test(new MastersCosineWave(), D);
+
+        int[] SHD = {10};
+        test(new ShekelsFoxhole(), SHD);
+
+
     }
 
-    public ArrayList<ArrayList<Double>> generate(double[] range, int d){
+    // test function for various dimensions
+    public static void test(FitnessFormula f, int[] d){
+
+        for(int i = 0; i<d.length; i++){
+
+            ArrayList<ArrayList<Double>> nums = generate(f.range(), d[i]);
+            double[] results = new double[TESTS];
+
+            for(int k = 0; k < TESTS; k++){
+                results[k] = f.calculate(nums.get(k), d[i]);
+            }
+
+            export(f.toString(), d[i], results);
+        }
+    }
+
+    public static ArrayList<ArrayList<Double>> generate(double[] range, int d){
+
         double min = range[0];
         double max = range[1];
         ArrayList<ArrayList<Double>> result = new ArrayList<>();
@@ -25,12 +80,37 @@ public class Project_1 {
         for(int i = 0; i < TESTS; i ++){
             for(int j = 0; j < d; j++){
                 //generate number
+
                 double generated = 0.0;
                 result.get(i).add(j, generated);
             }
         }
 
         return result;
+    }
+
+    // Export data to csv file
+    public static void export(String name, int d, double[] results){
+
+        try{
+            PrintWriter pw = new PrintWriter(new File("fitness.csv"));
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(name);
+            sb.append(",");
+            sb.append(d);
+            for(int i = 0; i < TESTS; i++){
+                sb.append(",");
+                sb.append(results[i]);
+            }
+            sb.append("\n");
+
+            pw.write(sb.toString());
+            pw.close();
+        }
+        catch(FileNotFoundException e){
+            System.out.println("Error: No Such File found.");
+        }
     }
 }
 
@@ -51,6 +131,10 @@ class Schwefel implements FitnessFormula{
         double[] r = {-512,512};
         return r;
     }
+
+    public String toString(){
+        return "Schwefel";
+    }
 }
 
 // #2
@@ -67,6 +151,10 @@ class FirstDeJong implements FitnessFormula{
     public double[] range() {
         double[] r = {-100,100};
         return r;
+    }
+
+    public String toString(){
+        return "1st De Jong";
     }
 }
 
@@ -85,6 +173,10 @@ class Rosenbrock implements FitnessFormula{
         double[] r = {-100,100};
         return r;
     }
+
+    public String toString(){
+        return "Rosenbrock";
+    }
 }
 
 // #4
@@ -102,6 +194,10 @@ class Rastrigin implements FitnessFormula{
     public double[] range() {
         double[] r = {-30,30};
         return r;
+    }
+
+    public String toString(){
+        return "Rastrigin";
     }
 }
 
@@ -123,6 +219,10 @@ class Griewangk implements FitnessFormula{
         double[] r = {-500,500};
         return r;
     }
+
+    public String toString(){
+        return "Griewangk";
+    }
 }
 
 // #6
@@ -141,6 +241,10 @@ class SineEnvelopeSineWave implements FitnessFormula{
         double[] r = {-30,30};
         return r;
     }
+
+    public String toString(){
+        return "Sine Envelope Sine Wave";
+    }
 }
 
 // #7
@@ -157,6 +261,10 @@ class StretchedVSineWave implements FitnessFormula{
     public double[] range() {
         double[] r = {-30,30};
         return r;
+    }
+
+    public String toString(){
+        return "Stretched V Sine Wave";
     }
 }
 
@@ -175,6 +283,10 @@ class AckeysOne implements FitnessFormula{
         double[] r = {-32,32};
         return r;
     }
+
+    public String toString(){
+        return "Ackey's One";
+    }
 }
 
 // #9
@@ -191,6 +303,10 @@ class AckeysTwo implements FitnessFormula{
     public double[] range() {
         double[] r = {-32,32};
         return r;
+    }
+
+    public String toString(){
+        return "Ackey's Two";
     }
 }
 
@@ -209,6 +325,10 @@ class EggHolder implements FitnessFormula{
         double[] r = {-500,500};
         return r;
     }
+
+    public String toString(){
+        return "Egg Holder";
+    }
 }
 
 // #11
@@ -226,6 +346,10 @@ class Rana implements FitnessFormula{
         double[] r = {-500,500};
         return r;
     }
+
+    public String toString(){
+        return "Rana";
+    }
 }
 
 // #12
@@ -242,6 +366,10 @@ class Pathological implements FitnessFormula{
     public double[] range() {
         double[] r = {-100,100};
         return r;
+    }
+
+    public String toString(){
+        return "Pathological";
     }
 }
 
@@ -261,6 +389,10 @@ class Michalewicz implements FitnessFormula{
         double[] r = {0,Math.PI};
         return r;
     }
+
+    public String toString(){
+        return "Michalewicz";
+    }
 }
 
 // #14
@@ -279,16 +411,29 @@ class MastersCosineWave implements FitnessFormula{
         double[] r = {-30,30};
         return r;
     }
+
+    public String toString(){
+        return "Master's Cosine Wave";
+    }
 }
 
 // #15
-class ShekelsFoxhole {
+class ShekelsFoxhole implements FitnessFormula{
 
-    public double calculate(ArrayList<Double> v, ArrayList<Double> c, ArrayList<ArrayList<Double>> a, int m, int n){
+    private int m = 30;
+    private ArrayList<Double> c;
+    private ArrayList<ArrayList<Double>> a;
+
+    // When created read in data from file
+    public ShekelsFoxhole(){
+
+    }
+
+    public double calculate(ArrayList<Double> v, int d){
         double s = 0.0;
         for(int i = 0; i < m; i++){
             double s2 = 0.0;
-            for(int j = 0; j < n; j++){
+            for(int j = 0; j < d; j++){
                 ArrayList<Double> row = a.get(i);
                 s2 += Math.pow((v.get(j)-row.get(j)),2);
             }
@@ -301,5 +446,9 @@ class ShekelsFoxhole {
     public double[] range() {
         double[] r = {0,10};
         return r;
+    }
+
+    public String toString(){
+        return "Shekel's Foxhole";
     }
 }

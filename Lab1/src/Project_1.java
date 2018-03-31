@@ -8,6 +8,7 @@
 import java.io.*;
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Project_1 {
@@ -21,7 +22,6 @@ public class Project_1 {
 
         test(new Schwefel(), D);
 
-        /*
         test(new FirstDeJong(), D);
 
         test(new Rosenbrock(), D);
@@ -50,7 +50,6 @@ public class Project_1 {
 
         int[] SHD = {10};
         test(new ShekelsFoxhole(), SHD);
-        */
 
     }
 
@@ -80,9 +79,10 @@ public class Project_1 {
         for(int i = 0; i < TESTS; i ++){
             ArrayList<Double> inner = new ArrayList<>();
             for(int j = 0; j < d; j++){
-                //generate number
 
-                double generated = (double)j;
+                MTRandom rand = new MTRandom();
+                double generated = min + (max - min) * rand.nextDouble();
+
                 inner.add(generated);
             }
             result.add(inner);
@@ -95,7 +95,7 @@ public class Project_1 {
     public static void export(String name, int d, double[] results){
 
         try{
-            PrintWriter pw = new PrintWriter(new File("fitness.csv"));
+            FileWriter fw = new FileWriter("fitness.csv", true);
             StringBuilder sb = new StringBuilder();
 
             sb.append(name);
@@ -107,11 +107,14 @@ public class Project_1 {
             }
             sb.append("\n");
 
-            pw.write(sb.toString());
-            pw.close();
+            fw.write(sb.toString());
+            fw.close();
         }
         catch(FileNotFoundException e){
             System.out.println("Error: No Such File found.");
+        }
+        catch(IOException e){
+            System.out.println("Error: cannot output to file.");
         }
     }
 }

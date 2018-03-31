@@ -5,11 +5,10 @@
     Last Updated - 3/30/18
  */
 
+import java.io.*;
 import java.lang.Math;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class Project_1 {
 
@@ -22,6 +21,7 @@ public class Project_1 {
 
         test(new Schwefel(), D);
 
+        /*
         test(new FirstDeJong(), D);
 
         test(new Rosenbrock(), D);
@@ -50,7 +50,7 @@ public class Project_1 {
 
         int[] SHD = {10};
         test(new ShekelsFoxhole(), SHD);
-
+        */
 
     }
 
@@ -76,14 +76,16 @@ public class Project_1 {
         double max = range[1];
         ArrayList<ArrayList<Double>> result = new ArrayList<>();
 
-        //Mersenne Twister
+        // Mersenne Twister
         for(int i = 0; i < TESTS; i ++){
+            ArrayList<Double> inner = new ArrayList<>();
             for(int j = 0; j < d; j++){
                 //generate number
 
-                double generated = 0.0;
-                result.get(i).add(j, generated);
+                double generated = (double)j;
+                inner.add(generated);
             }
+            result.add(inner);
         }
 
         return result;
@@ -427,6 +429,43 @@ class ShekelsFoxhole implements FitnessFormula{
     // When created read in data from file
     public ShekelsFoxhole(){
 
+        String fileName = "Shekel's_Foxhole_Data.txt";
+
+        try{
+            Scanner s = new Scanner(new File(fileName));
+            s.useDelimiter("\\Z");
+
+            c = new ArrayList<>();
+
+            // Parse c array
+            String file = s.next();
+            String[] var = file.split(";");
+            String[] c1 = var[0].split("\\{");
+            String[] c2 = c1[1].split("}");
+            String[] c3 = c2[0].split(",");
+            for(int i=0; i<c3.length; i++){
+                c.add(Double.parseDouble(c3[i]));
+            }
+
+            a = new ArrayList<>();
+
+            // Parse a array
+            String[] a1 = var[1].split("\\{");
+            for(int i=2; i < a1.length; i++){
+                ArrayList<Double> inner = new ArrayList<>();
+                String[] a2 = a1[i].split("}");
+                String[] a3 = a2[0].split(",");
+                for(int j=0; j<a3.length; j++){
+                    inner.add(Double.parseDouble(a3[j]));
+                }
+                a.add(inner);
+            }
+
+            s.close();
+        }
+        catch(FileNotFoundException e){
+            System.out.println("Error: File not found.");
+        }
     }
 
     public double calculate(ArrayList<Double> v, int d){
@@ -434,8 +473,7 @@ class ShekelsFoxhole implements FitnessFormula{
         for(int i = 0; i < m; i++){
             double s2 = 0.0;
             for(int j = 0; j < d; j++){
-                ArrayList<Double> row = a.get(i);
-                s2 += Math.pow((v.get(j)-row.get(j)),2);
+                s2 += Math.pow((v.get(j)-a.get(i).get(j)),2);
             }
             s += 1/(c.get(i)+s2);
         }

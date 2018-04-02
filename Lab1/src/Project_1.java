@@ -2,13 +2,12 @@
     Blake Calvin
     CS 471 - Optimization
     Project 1
-    Last Updated - 3/30/18
+    Last Updated - 4/1/18
  */
 
 import java.io.*;
 import java.lang.Math;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Project_1 {
@@ -212,9 +211,11 @@ class Griewangk implements FitnessFormula{
     public double calculate(ArrayList<Double> v, int d) {
         double s = 0.0;
         double p = 1.0;
+        double I = 1.0;
         for(int i = 0; i < d; i++){
             s += (Math.pow(v.get(i),2)/4000);
-            p = p * Math.cos((v.get(i)/(Math.sqrt(i))));
+            p = p * Math.cos((v.get(i)/(Math.sqrt(I))));
+            I++;
         }
         s = 1 + s - p;
         return s;

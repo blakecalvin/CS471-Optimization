@@ -2,7 +2,7 @@
     Blake Calvin
     CS 471 - Optimization
     Project 1
-    Last Updated - 4/1/18
+    Last Updated - 4/4/18
  */
 
 import java.io.*;
@@ -14,6 +14,7 @@ public class Project_1 {
 
     private static final int TESTS = 30;
     private static final int[] D = {10,20,30};
+    private static ArrayList<Long> time = new ArrayList<>();
 
     public static void main(String[] args){
 
@@ -63,8 +64,10 @@ public class Project_1 {
             for(int k = 0; k < TESTS; k++){
                 results[k] = f.calculate(nums.get(k), d[i]);
             }
+            long avg = (f.getAvgTime())/(long)TESTS;
 
-            export(f.toString(), d[i], results);
+            export(f.toString(), d[i], avg, results);
+            f.resetAvgTime();
         }
     }
 
@@ -91,7 +94,7 @@ public class Project_1 {
     }
 
     // Export data to csv file
-    public static void export(String name, int d, double[] results){
+    public static void export(String name, int d, long avgTime, double[] results){
 
         try{
             FileWriter fw = new FileWriter("fitness.csv", true);
@@ -100,6 +103,8 @@ public class Project_1 {
             sb.append(name);
             sb.append(",");
             sb.append(d);
+            sb.append(",");
+            sb.append(avgTime);
             for(int i = 0; i < TESTS; i++){
                 sb.append(",");
                 sb.append(results[i]);
@@ -123,11 +128,15 @@ public class Project_1 {
 // #1
 class Schwefel implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d; i++){
             s += -(v.get(i))*Math.sin(Math.sqrt(Math.abs(v.get(i))));
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -139,16 +148,28 @@ class Schwefel implements FitnessFormula{
     public String toString(){
         return "Schwefel";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #2
 class FirstDeJong implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d; i++){
             s += Math.pow(v.get(i),2);
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -160,16 +181,28 @@ class FirstDeJong implements FitnessFormula{
     public String toString(){
         return "1st De Jong";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #3
 class Rosenbrock implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += (100*((Math.pow(v.get(i),2))-v.get(i+1))) + Math.pow((1-v.get(i)),2);
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -181,17 +214,29 @@ class Rosenbrock implements FitnessFormula{
     public String toString(){
         return "Rosenbrock";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #4
 class Rastrigin implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d; i++){
             s += Math.pow(v.get(i),2)-(10*Math.cos(2*Math.PI*v.get(i)));
         }
         s = s*2*d;
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -203,12 +248,23 @@ class Rastrigin implements FitnessFormula{
     public String toString(){
         return "Rastrigin";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #5
 class Griewangk implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         double p = 1.0;
         double I = 1.0;
@@ -218,6 +274,7 @@ class Griewangk implements FitnessFormula{
             I++;
         }
         s = 1 + s - p;
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -229,17 +286,29 @@ class Griewangk implements FitnessFormula{
     public String toString(){
         return "Griewangk";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #6
 class SineEnvelopeSineWave implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += 0.5 + Math.pow(Math.sin((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)-0.5)),2)/Math.pow((1+0.001*(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))),2);
         }
         s = -s;
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -251,16 +320,28 @@ class SineEnvelopeSineWave implements FitnessFormula{
     public String toString(){
         return "Sine Envelope Sine Wave";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #7
 class StretchedVSineWave implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += (Math.pow((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)),.25)*Math.pow(Math.sin((50*Math.pow((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)),.1))),2)+1);
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -272,16 +353,28 @@ class StretchedVSineWave implements FitnessFormula{
     public String toString(){
         return "Stretched V Sine Wave";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #8
 class AckeysOne implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += (1/Math.pow((Math.E),.2))*Math.sqrt(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))+3*(Math.cos(2*v.get(i))+Math.sin(2*v.get(i+1)));
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -293,16 +386,28 @@ class AckeysOne implements FitnessFormula{
     public String toString(){
         return "Ackey's One";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #9
 class AckeysTwo implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += 20 + Math.E - (20/(Math.pow(Math.E,.2)*Math.sqrt((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))/2)))-Math.pow(Math.E,0.5*(Math.cos(2*Math.PI*v.get(i))+Math.cos(2*Math.PI*v.get(i+1))));
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -314,16 +419,28 @@ class AckeysTwo implements FitnessFormula{
     public String toString(){
         return "Ackey's Two";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #10
 class EggHolder implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += -v.get(i)*Math.sin(Math.sqrt(Math.abs(v.get(i)-v.get(i+1)-47)))-(v.get(i+1)+47)*Math.sin(Math.sqrt(Math.abs(v.get(i+1)+47+(v.get(i)/2))));
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -335,16 +452,28 @@ class EggHolder implements FitnessFormula{
     public String toString(){
         return "Egg Holder";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #11
 class Rana implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += v.get(i)*Math.sin(Math.sqrt(Math.abs(v.get(i+1)-v.get(i)+1)))*Math.cos(Math.sqrt(Math.abs(v.get(i+1)+v.get(i)+1)))+(v.get(i+1)+1)*Math.cos(Math.sqrt(Math.abs(v.get(i+1)-v.get(i)+1)))*Math.sin(Math.sqrt(Math.abs(v.get(i+1)+v.get(i)+1)));
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -356,16 +485,28 @@ class Rana implements FitnessFormula{
     public String toString(){
         return "Rana";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #12
 class Pathological implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += 0.5 + (Math.pow(Math.sin(Math.sqrt(100*Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))),2)-0.5)/(1+0.001*Math.pow((Math.pow(v.get(i),2)-2*v.get(i)*v.get(i+1)+Math.pow(v.get(i+1),2)),2));
         }
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -377,17 +518,29 @@ class Pathological implements FitnessFormula{
     public String toString(){
         return "Pathological";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #13
 class Michalewicz implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d; i++){
             s += Math.sin(v.get(i))*Math.pow((Math.sin((i*Math.pow(v.get(i),2))/Math.PI)),10);
         }
         s = -s;
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -399,17 +552,29 @@ class Michalewicz implements FitnessFormula{
     public String toString(){
         return "Michalewicz";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #14
 class MastersCosineWave implements FitnessFormula{
 
+    public long avgTime = 0;
+
     public double calculate(ArrayList<Double> v, int d) {
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
             s += Math.pow(Math.E,(-(1/8)*(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)+0.5*v.get(i+1)*v.get(i))))*Math.cos(4*Math.sqrt(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)+0.5*v.get(i+1)*v.get(i)));
         }
         s = -s;
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -421,11 +586,20 @@ class MastersCosineWave implements FitnessFormula{
     public String toString(){
         return "Master's Cosine Wave";
     }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
+    }
 }
 
 // #15
 class ShekelsFoxhole implements FitnessFormula{
 
+    public long avgTime = 0;
     private int m = 30;
     private ArrayList<Double> c;
     private ArrayList<ArrayList<Double>> a;
@@ -473,6 +647,7 @@ class ShekelsFoxhole implements FitnessFormula{
     }
 
     public double calculate(ArrayList<Double> v, int d){
+        long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < m; i++){
             double s2 = 0.0;
@@ -482,6 +657,7 @@ class ShekelsFoxhole implements FitnessFormula{
             s += 1/(c.get(i)+s2);
         }
         s = -s;
+        avgTime += System.nanoTime() - start;
         return s;
     }
 
@@ -492,5 +668,13 @@ class ShekelsFoxhole implements FitnessFormula{
 
     public String toString(){
         return "Shekel's Foxhole";
+    }
+
+    public long getAvgTime() {
+        return avgTime;
+    }
+
+    public void resetAvgTime() {
+        avgTime = 0;
     }
 }

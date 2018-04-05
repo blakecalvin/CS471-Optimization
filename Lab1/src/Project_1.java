@@ -12,14 +12,13 @@ import java.util.Scanner;
 
 public class Project_1 {
 
+    // Constants
     private static final int TESTS = 30;
     private static final int[] D = {10,20,30};
-    private static ArrayList<Long> time = new ArrayList<>();
 
     public static void main(String[] args){
 
-        // Could make seperate thread for each test??
-
+        //Test each fitness function over given dimensions
         test(new Schwefel(), D);
 
         test(new FirstDeJong(), D);
@@ -53,35 +52,56 @@ public class Project_1 {
 
     }
 
-    // test function for various dimensions
+    /*
+        Function: test()
+        Description: Runs 30 tests on the given function 'f' and dimension set 'd'.
+        Params: FitnessFormula f, int[] d
+        Return: none
+     */
     public static void test(FitnessFormula f, int[] d){
 
         for(int i = 0; i<d.length; i++){
 
+            // Randomly generates a multidimensional arrayList of values to use for testing
             ArrayList<ArrayList<Double>> nums = generate(f.range(), d[i]);
             double[] results = new double[TESTS];
 
+            // Puts generated values through function
             for(int k = 0; k < TESTS; k++){
                 results[k] = f.calculate(nums.get(k), d[i]);
             }
+
+            // Calculates average time to complete computation
             long avg = (f.getAvgTime())/(long)TESTS;
 
-            export(f.toString(), d[i], avg, results);
+            // Exports results to CSV file
+            export(f.name(), d[i], avg, results);
+            // resets avgTime to zero
             f.resetAvgTime();
         }
     }
 
+    /*
+        Function: generate()
+        Description: Generates a number arrayLists determined by 'TESTS' of length 'd' within the given range using the
+            Mersenne Twister pseudo-number generator.
+        Params: double[] range, int d
+        Return: ArrayList<ArrayList<Double>>
+     */
     public static ArrayList<ArrayList<Double>> generate(double[] range, int d){
 
+        // Range for given function
         double min = range[0];
         double max = range[1];
+
+        // Returned values from the calculate function
         ArrayList<ArrayList<Double>> result = new ArrayList<>();
 
-        // Mersenne Twister
         for(int i = 0; i < TESTS; i ++){
             ArrayList<Double> inner = new ArrayList<>();
             for(int j = 0; j < d; j++){
 
+                // Creates new instance of Mersenne Twister pseudo-number generator
                 MTRandom rand = new MTRandom();
                 double generated = min + (max - min) * rand.nextDouble();
 
@@ -93,7 +113,12 @@ public class Project_1 {
         return result;
     }
 
-    // Export data to csv file
+    /*
+        Function: export
+        Description: Exports the results from the tests to a csv file for analysis of data.
+        Params: String name, int d, long avgTime, double[] results
+        Return: none
+     */
     public static void export(String name, int d, long avgTime, double[] results){
 
         try{
@@ -118,7 +143,7 @@ public class Project_1 {
             System.out.println("Error: No Such File found.");
         }
         catch(IOException e){
-            System.out.println("Error: cannot output to file.");
+            System.out.println("Error: Cannot output to file.");
         }
     }
 }
@@ -126,9 +151,7 @@ public class Project_1 {
 //--- Fitness Function Definitions -------------------------------------------
 
 // #1
-class Schwefel implements FitnessFormula{
-
-    public long avgTime = 0;
+class Schwefel extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -145,23 +168,13 @@ class Schwefel implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Schwefel";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #2
-class FirstDeJong implements FitnessFormula{
-
-    public long avgTime = 0;
+class FirstDeJong extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -178,23 +191,13 @@ class FirstDeJong implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "1st De Jong";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #3
-class Rosenbrock implements FitnessFormula{
-
-    public long avgTime = 0;
+class Rosenbrock extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -211,23 +214,13 @@ class Rosenbrock implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Rosenbrock";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #4
-class Rastrigin implements FitnessFormula{
-
-    public long avgTime = 0;
+class Rastrigin extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -245,23 +238,13 @@ class Rastrigin implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Rastrigin";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #5
-class Griewangk implements FitnessFormula{
-
-    public long avgTime = 0;
+class Griewangk extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -283,23 +266,13 @@ class Griewangk implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Griewangk";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #6
-class SineEnvelopeSineWave implements FitnessFormula{
-
-    public long avgTime = 0;
+class SineEnvelopeSineWave extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -317,23 +290,13 @@ class SineEnvelopeSineWave implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Sine Envelope Sine Wave";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #7
-class StretchedVSineWave implements FitnessFormula{
-
-    public long avgTime = 0;
+class StretchedVSineWave extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -350,23 +313,13 @@ class StretchedVSineWave implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Stretched V Sine Wave";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #8
-class AckeysOne implements FitnessFormula{
-
-    public long avgTime = 0;
+class AckeysOne extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -383,23 +336,13 @@ class AckeysOne implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Ackey's One";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #9
-class AckeysTwo implements FitnessFormula{
-
-    public long avgTime = 0;
+class AckeysTwo extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -416,23 +359,13 @@ class AckeysTwo implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Ackey's Two";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #10
-class EggHolder implements FitnessFormula{
-
-    public long avgTime = 0;
+class EggHolder extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -449,23 +382,13 @@ class EggHolder implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Egg Holder";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #11
-class Rana implements FitnessFormula{
-
-    public long avgTime = 0;
+class Rana extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -482,23 +405,13 @@ class Rana implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Rana";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #12
-class Pathological implements FitnessFormula{
-
-    public long avgTime = 0;
+class Pathological extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -515,23 +428,13 @@ class Pathological implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Pathological";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #13
-class Michalewicz implements FitnessFormula{
-
-    public long avgTime = 0;
+class Michalewicz extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -549,23 +452,13 @@ class Michalewicz implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Michalewicz";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #14
-class MastersCosineWave implements FitnessFormula{
-
-    public long avgTime = 0;
+class MastersCosineWave extends FitnessFormula{
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -583,28 +476,19 @@ class MastersCosineWave implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Master's Cosine Wave";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }
 
 // #15
-class ShekelsFoxhole implements FitnessFormula{
+class ShekelsFoxhole extends FitnessFormula{
 
-    public long avgTime = 0;
     private int m = 30;
     private ArrayList<Double> c;
     private ArrayList<ArrayList<Double>> a;
 
-    // When created read in data from file
+    // When object is created, read in values from text file
     public ShekelsFoxhole(){
 
         String fileName = "Shekel's_Foxhole_Data.txt";
@@ -615,7 +499,7 @@ class ShekelsFoxhole implements FitnessFormula{
 
             c = new ArrayList<>();
 
-            // Parse c array
+            // Parse c value array
             String file = s.next();
             String[] var = file.split(";");
             String[] c1 = var[0].split("\\{");
@@ -627,7 +511,7 @@ class ShekelsFoxhole implements FitnessFormula{
 
             a = new ArrayList<>();
 
-            // Parse a array
+            // Parse a value array
             String[] a1 = var[1].split("\\{");
             for(int i=2; i < a1.length; i++){
                 ArrayList<Double> inner = new ArrayList<>();
@@ -666,15 +550,7 @@ class ShekelsFoxhole implements FitnessFormula{
         return r;
     }
 
-    public String toString(){
+    public String name(){
         return "Shekel's Foxhole";
-    }
-
-    public long getAvgTime() {
-        return avgTime;
-    }
-
-    public void resetAvgTime() {
-        avgTime = 0;
     }
 }

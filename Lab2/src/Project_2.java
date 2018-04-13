@@ -7,8 +7,6 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,182 +14,126 @@ public class Project_2 {
 
     // Constants
     private static final int TESTS = 30;
-    private static final int[] D = {10,20,30};
+
+    // All fitness equations
+    public static FitnessFormula[] list = {new Schwefel(), new FirstDeJong(), new Rosenbrock(), new Rastrigin(), new Griewangk(),
+            new SineEnvelopeSineWave(), new StretchedVSineWave(), new AckeysOne(), new AckeysTwo(), new EggHolder(), new Rana(),
+            new Michalewicz(), new MastersCosineWave(), new ShekelsFoxhole()};
 
     public static void main(String[] args){
 
-        if(args.length<4){
-            System.out.println("Error: missing arguments [Function #] [Algorithm #] [# of Dimensions] [# of Iterations]");
+        if(args.length<3){
+            System.out.println("Error: missing arguments [Algorithm #] [# of Dimensions] [# of Iterations]");
             return;
         }
 
-        int function = Integer.parseInt(args[0]);
-        int algorithm = Integer.parseInt(args[1]);
-        int dimensions = Integer.parseInt(args[2]);
-        int iterations = Integer.parseInt(args[3]);
+        int algorithm = Integer.parseInt(args[0]);
+        int dimensions = Integer.parseInt(args[1]);
+        int iterations = Integer.parseInt(args[2]);
 
-        switch (function) {
+        switch (algorithm){
             case 1:
-                test(new Schwefel(), algorithm, dimensions, iterations);
+                new Test(new Blind(), list, dimensions, iterations, TESTS);
                 break;
             case 2:
-                test(new FirstDeJong(), algorithm, dimensions, iterations);
+                new Test(new LocalSearch(), list, dimensions, iterations, TESTS);
                 break;
             case 3:
-                test(new Rosenbrock(), algorithm, dimensions, iterations);
-                break;
-            case 4:
-                test(new Rastrigin(), algorithm, dimensions, iterations);
-                break;
-            case 5:
-                test(new Griewangk(), algorithm, dimensions, iterations);
-                break;
-            case 6:
-                test(new SineEnvelopeSineWave(), algorithm, dimensions, iterations);
-                break;
-            case 7:
-                test(new StretchedVSineWave(), algorithm, dimensions, iterations);
-                break;
-            case 8:
-                test(new AckeysOne(), algorithm, dimensions, iterations);
-                break;
-            case 9:
-                test(new AckeysTwo(), algorithm, dimensions, iterations);
-                break;
-            case 10:
-                test(new EggHolder(), algorithm, dimensions, iterations);
-                break;
-            case 11:
-                test(new Rana(), algorithm, dimensions, iterations);
-                break;
-            case 12:
-                test(new Pathological(), algorithm, dimensions, iterations);
-                break;
-            case 13:
-                test(new Michalewicz(), algorithm, dimensions, iterations);
-                break;
-            case 14:
-                test(new MastersCosineWave(), algorithm, dimensions, iterations);
-                break;
-            case 15:
-                test(new ShekelsFoxhole(), algorithm, dimensions, iterations);
-                break;
 
+                break;
         }
 
     }
 
-    /*
-        Function: test()
-        Description: Runs 30 tests on the given function 'f' and dimension set 'd'.
-        Params: FitnessFormula f, int[] d
-        Return: none
-     */
-    public static void test(FitnessFormula f, int algo, int d, int iter){
+}
 
-        double[] results = new double[TESTS];
+//--- Algorithms -------------------------------------------------------------
 
-        for(int k = 0; k < TESTS; k++){
-            switch (algo){
-                case 1:
-                    results[k] = f.calculate(randomWalk(iter, f , d),d);
-                    break;
-                case 2:
-                    //results[k] = ;
-                    break;
-                case 3:
-                    //results[k] = ;
-                    break;
-            }
-        }
+class Blind extends Algorithm{
 
-        // Calculates average time to complete computation
-        long avg = (f.getAvgTime())/(long)TESTS*iter;
-
-        // Exports results to CSV file
-        export(f.name(), d, avg, results);
-        // resets avgTime to zero
-        f.resetAvgTime();
-    }
-
-    /*
-        Function: generate()
-        Description: Generates a arrayList of length 'd' within the given range using the
-            Mersenne Twister pseudo-number generator.
-        Params: double[] range, int d
-        Return: ArrayList<Double>
-     */
-    public static ArrayList<Double> generate(double[] range, int d){
-
-        // Range for given function
-        double min = range[0];
-        double max = range[1];
-
-        // Returned values from the calculate function
-        ArrayList<Double> result = new ArrayList<>();
-        for(int j = 0; j < d; j++){
-
-            // Creates new instance of Mersenne Twister pseudo-number generator
-            MTRandom rand = new MTRandom();
-            double generated = min + (max - min) * rand.nextDouble();
-
-            result.add(generated);
-        }
-
-        return result;
-    }
-
-    /*
-        Function: export
-        Description: Exports the results from the tests to a csv file for analysis of data.
-        Params: String name, int d, long avgTime, double[] results
-        Return: none
-     */
-    public static void export(String name, int d, long avgTime, double[] results){
-
-        try{
-            FileWriter fw = new FileWriter("fitness.csv", true);
-            StringBuilder sb = new StringBuilder();
-
-            sb.append(name);
-            sb.append(",");
-            sb.append(d);
-            sb.append(",");
-            sb.append(avgTime);
-            for(int i = 0; i < TESTS; i++){
-                sb.append(",");
-                sb.append(results[i]);
-            }
-            sb.append("\n");
-
-            fw.write(sb.toString());
-            fw.close();
-        }
-        catch(FileNotFoundException e){
-            System.out.println("Error: No Such File found.");
-        }
-        catch(IOException e){
-            System.out.println("Error: Cannot output to file.");
-        }
-    }
-
-    //--- Algorithms -------------------------------------------------------------------
-
-    public static ArrayList<Double> randomWalk(int iterations, FitnessFormula f, int d){
-
+    public ArrayList<Double> calculate(int iterations, FitnessFormula f, int d){
         ArrayList<Double> argBest = new ArrayList<>();
         double fitness0 = f.range()[1];
 
         for(int i  = 0; i < iterations; i++){
-           ArrayList<Double> arg = generate(f.range(), d);
-           Double fitness = f.calculate(arg, d);
-           if(fitness < fitness0){
-               fitness0 = fitness;
-               argBest = arg;
-           }
+            ArrayList<Double> arg = generate(f.range(), d);
+            Double fitness = f.calculate(arg, d);
+            if(fitness < fitness0){
+                fitness0 = fitness;
+                argBest = arg;
+            }
         }
 
+        fBest = fitness0;
+        count += iterations;
         return argBest;
+    }
+
+    String getName() {
+        return "Blind";
+    }
+}
+
+class LocalSearch extends Algorithm{
+
+    private double delta = .11;
+
+    ArrayList<Double> calculate(int iterations, FitnessFormula f, int d) {
+
+        ArrayList<Double> argBest = generate(f.range(), d);
+        boolean tau = true;
+
+        while(tau){
+
+            tau = false;
+            ArrayList<Double> argLoc = empiricalGradient(argBest, f, d);
+            withinBounds(f, argLoc);
+
+            if(f.calculate(argLoc, d) < f.calculate(argBest, d)){
+                argBest = argLoc;
+                tau = true;
+            }
+
+            count ++;
+        }
+
+        fBest = f.calculate(argBest, d);
+        return argBest;
+    }
+
+    ArrayList<Double> empiricalGradient(ArrayList<Double> argBest, FitnessFormula f, int d){
+
+        ArrayList<Double> argLoc = new ArrayList<>();
+        ArrayList<Double> argTemp = new ArrayList<>(argBest);
+
+        for(int i = 0; i < argBest.size(); i++){
+
+            Double deltaF = argBest.get(i)+delta;
+            argTemp.set(i,deltaF);
+
+            argLoc.add(argBest.get(i) - delta*(f.calculate(argTemp, d)-f.calculate(argBest, d)));
+
+            argTemp.set(i,argBest.get(i));
+        }
+        return argLoc;
+    }
+
+    /*
+        Takes any dimension that is out of bounds and pushes it to the bounds
+     */
+    void withinBounds(FitnessFormula f, ArrayList<Double> arg){
+        for(int i = 0; i < arg.size(); i++){
+            if(arg.get(i) < f.range()[0]){
+                arg.set(i, f.range()[0]);
+            }
+            else if(arg.get(i) > f.range()[1]){
+                arg.set(i, f.range()[1]);
+            }
+        }
+    }
+
+    String getName() {
+        return "Local Search";
     }
 }
 
@@ -599,6 +541,10 @@ class ShekelsFoxhole extends FitnessFormula{
 
     public String name(){
         return "Shekel's Foxhole";
+    }
+
+    public boolean scalable(){
+        return false;
     }
 }
 

@@ -27,4 +27,7 @@ public abstract class FitnessFormula {
     void resetAvgTime(){
         avgTime = 0;
     }
+    boolean scalable(){
+        return true;
+    }
 }

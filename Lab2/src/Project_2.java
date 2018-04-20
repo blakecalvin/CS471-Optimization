@@ -18,7 +18,7 @@ public class Project_2 {
     // All fitness equations
     public static FitnessFormula[] list = {new Schwefel(), new FirstDeJong(), new Rosenbrock(), new Rastrigin(), new Griewangk(),
             new SineEnvelopeSineWave(), new StretchedVSineWave(), new AckeysOne(), new AckeysTwo(), new EggHolder(), new Rana(),
-            new Michalewicz(), new MastersCosineWave(), new ShekelsFoxhole()};
+            new Pathological(), new Michalewicz(), new MastersCosineWave(), new ShekelsFoxhole()};
 
     public static void main(String[] args){
 
@@ -33,7 +33,7 @@ public class Project_2 {
 
         switch (algorithm){
             case 1:
-                new Test(new Blind(), list, dimensions, iterations, TESTS);
+                new Test(new BlindSearch(), list, dimensions, iterations, TESTS);
                 break;
             case 2:
                 new Test(new LocalSearch(), list, dimensions, iterations, TESTS);
@@ -49,7 +49,7 @@ public class Project_2 {
 
 //--- Algorithms -------------------------------------------------------------
 
-class Blind extends Algorithm{
+class BlindSearch extends Algorithm{
 
     public ArrayList<Double> calculate(int iterations, FitnessFormula f, int d){
         ArrayList<Double> argBest = new ArrayList<>();
@@ -70,7 +70,7 @@ class Blind extends Algorithm{
     }
 
     String getName() {
-        return "Blind";
+        return "Blind Search";
     }
 }
 

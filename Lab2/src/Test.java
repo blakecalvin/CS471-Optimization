@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,32 +10,38 @@ public class Test {
     private int d;
     private int iter;
     private int t;
+    private String file;
     private double[] results;
 
-    public Test(Algorithm a, FitnessFormula[] f, int dimensions, int iterations, int tests){
+    public Test(Algorithm a, FitnessFormula[] f, int dimensions, int iterations, int tests, String output){
         algo = a;
         list = f;
         d = dimensions;
         iter = iterations;
         t = tests;
+        file = output;
         run();
     }
 
+    /*
+        Creates a test for each algorithm running through all fitness functions with the given number of tests and iterations
+     */
     void run(){
         for(int i = 0; i<list.length; i++){
-            results = new double[t];
-            for(int k = 0; k < t; k++){
-                if(list[i].scalable() || d <= 10){
+            if(list[i].scalable() || d <= 10) {
+                results = new double[t];
+                for (int k = 0; k < t; k++) {
+
                     algo.calculate(iter, list[i], d);
                     results[k] = algo.fBest;
                     algo.fBest = 0;
                 }
-            }
 
-            int avgIter = algo.count/t;
-            long avg = (list[i].getAvgTime())/(long)algo.count;
-            algo.count = 0;
-            export(algo.getName(), list[i].name(), d, avg, avgIter, results);
+                int avgIter = algo.count / t;
+                long avg = (list[i].getAvgTime()) / algo.count;
+                algo.count = 0;
+                export(list[i].name(), d, avg, avgIter, results);
+            }
         }
     }
 
@@ -44,13 +51,13 @@ public class Test {
         Params: String name, int d, long avgTime, double[] results
         Return: none
     */
-    void export(String algo, String f, int d, long avgTime, int avgIter, double[] results){
+    void export(String f, int d, long avgTime, int avgIter, double[] results){
         try{
-            FileWriter fw = new FileWriter("fitness.csv", true);
+            File yourFile = new File(file);
+            yourFile.createNewFile();
+            FileWriter fw = new FileWriter(yourFile, true);
             StringBuilder sb = new StringBuilder();
 
-            sb.append(algo);
-            sb.append(",");
             sb.append(f);
             sb.append(",");
             sb.append(d);

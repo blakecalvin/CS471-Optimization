@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /*
     Abstract class for creation of fitness functions
  */
-public abstract class FitnessFormula {
+abstract class FitnessFormula {
 
     // Variables
     public long avgTime = 0;

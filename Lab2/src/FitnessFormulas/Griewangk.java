@@ -1,7 +1,9 @@
+package FitnessFormulas;
+
 import java.util.ArrayList;
 
 // #5
-class Griewangk extends FitnessFormula {
+public class Griewangk extends FitnessFormula {
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -24,6 +26,6 @@ class Griewangk extends FitnessFormula {
     }
 
     public String name(){
-        return "Griewangk";
+        return "FitnessFormulas.Griewangk";
     }
 }

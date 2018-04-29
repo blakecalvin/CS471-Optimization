@@ -1,7 +1,9 @@
+package FitnessFormulas;
+
 import java.util.ArrayList;
 
 // #1
-class Schwefel extends FitnessFormula {
+public class Schwefel extends FitnessFormula {
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
@@ -19,6 +21,6 @@ class Schwefel extends FitnessFormula {
     }
 
     public String name(){
-        return "Schwefel";
+        return "FitnessFormulas.Schwefel";
     }
 }

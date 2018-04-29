@@ -5,7 +5,9 @@
     Last Updated - 4/12/18
  */
 
-public class Project_2 {
+import FitnessFormulas.*;
+
+public class Main {
 
     // Constants
     private static final int TESTS = 30;
@@ -14,6 +16,8 @@ public class Project_2 {
     public static FitnessFormula[] list = {new Schwefel(), new FirstDeJong(), new Rosenbrock(), new Rastrigin(), new Griewangk(),
             new SineEnvelopeSineWave(), new StretchedVSineWave(), new AckeysOne(), new AckeysTwo(), new EggHolder(), new Rana(),
             new Pathological(), new Michalewicz(), new MastersCosineWave(), new ShekelsFoxhole()};
+
+    // Parameters
 
     public static void main(String[] args){
 
@@ -39,6 +43,10 @@ public class Project_2 {
                 new Test(new IterativeLocalSearch(), list, dimensions, iterations, TESTS, output);
                 break;
         }
+
+    }
+
+    public static void parseParameters(){
 
     }
 

@@ -1,3 +1,5 @@
+import FitnessFormulas.FitnessFormula;
+
 import java.util.ArrayList;
 
 class LocalSearch extends Algorithm{
@@ -30,8 +32,8 @@ class LocalSearch extends Algorithm{
     }
 
     /*
-        Applies an empirical gadient to the given ArrayList
-     */
+        Applies an empirical gradient to the given ArrayList
+    */
     ArrayList<Double> empiricalGradient(ArrayList<Double> argBest, FitnessFormula f, int d){
 
         ArrayList<Double> argLoc = new ArrayList<>();

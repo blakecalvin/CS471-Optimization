@@ -1,24 +1,28 @@
+package FitnessFormulas;
+
+import FitnessFormulas.FitnessFormula;
+
 import java.util.ArrayList;
 
-// #3
-class Rosenbrock extends FitnessFormula {
+// #10
+public class EggHolder extends FitnessFormula {
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
-            s += (100*((Math.pow(v.get(i),2))-v.get(i+1))) + Math.pow((1-v.get(i)),2);
+            s += -v.get(i)*Math.sin(Math.sqrt(Math.abs(v.get(i)-v.get(i+1)-47)))-(v.get(i+1)+47)*Math.sin(Math.sqrt(Math.abs(v.get(i+1)+47+(v.get(i)/2))));
         }
         avgTime += System.nanoTime() - start;
         return s;
     }
 
     public double[] range() {
-        double[] r = {-100,100};
+        double[] r = {-500,500};
         return r;
     }
 
     public String name(){
-        return "Rosenbrock";
+        return "Egg Holder";
     }
 }

@@ -1,3 +1,5 @@
+import FitnessFormulas.FitnessFormula;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

@@ -1,6 +1,8 @@
+import FitnessFormulas.FitnessFormula;
+
 import java.util.ArrayList;
 
-public abstract class Algorithm {
+abstract class Algorithm {
 
     double fBest = 0;
     int count = 0;

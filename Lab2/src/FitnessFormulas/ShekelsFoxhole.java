@@ -1,10 +1,12 @@
+package FitnessFormulas;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 // #15
-class ShekelsFoxhole extends FitnessFormula {
+public class ShekelsFoxhole extends FitnessFormula {
 
     private int m = 30;
     private ArrayList<Double> c;

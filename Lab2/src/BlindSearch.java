@@ -1,3 +1,5 @@
+import FitnessFormulas.FitnessFormula;
+
 import java.util.ArrayList;
 
 class BlindSearch extends Algorithm{

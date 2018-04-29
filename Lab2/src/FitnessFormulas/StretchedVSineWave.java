@@ -1,15 +1,16 @@
+package FitnessFormulas;
+
 import java.util.ArrayList;
 
-// #4
-class Rastrigin extends FitnessFormula {
+// #7
+public class StretchedVSineWave extends FitnessFormula {
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
         double s = 0.0;
-        for(int i = 0; i < d; i++){
-            s += Math.pow(v.get(i),2)-(10*Math.cos(2*Math.PI*v.get(i)));
+        for(int i = 0; i < d-1; i++){
+            s += (Math.pow((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)),.25)*Math.pow(Math.sin((50*Math.pow((Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2)),.1))),2)+1);
         }
-        s = s*2*d;
         avgTime += System.nanoTime() - start;
         return s;
     }
@@ -20,6 +21,6 @@ class Rastrigin extends FitnessFormula {
     }
 
     public String name(){
-        return "Rastrigin";
+        return "Stretched V Sine Wave";
     }
 }

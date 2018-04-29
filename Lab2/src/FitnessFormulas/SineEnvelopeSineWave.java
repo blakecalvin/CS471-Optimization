@@ -1,7 +1,9 @@
+package FitnessFormulas;
+
 import java.util.ArrayList;
 
 // #6
-class SineEnvelopeSineWave extends FitnessFormula {
+public class SineEnvelopeSineWave extends FitnessFormula {
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();

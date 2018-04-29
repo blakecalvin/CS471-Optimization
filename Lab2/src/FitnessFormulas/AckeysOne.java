@@ -1,24 +1,26 @@
+package FitnessFormulas;
+
 import java.util.ArrayList;
 
-// #11
-class Rana extends FitnessFormula {
+// #8
+public class AckeysOne extends FitnessFormula {
 
     public double calculate(ArrayList<Double> v, int d) {
         long start = System.nanoTime();
         double s = 0.0;
         for(int i = 0; i < d-1; i++){
-            s += v.get(i)*Math.sin(Math.sqrt(Math.abs(v.get(i+1)-v.get(i)+1)))*Math.cos(Math.sqrt(Math.abs(v.get(i+1)+v.get(i)+1)))+(v.get(i+1)+1)*Math.cos(Math.sqrt(Math.abs(v.get(i+1)-v.get(i)+1)))*Math.sin(Math.sqrt(Math.abs(v.get(i+1)+v.get(i)+1)));
+            s += (1/Math.pow((Math.E),.2))*Math.sqrt(Math.pow(v.get(i),2)+Math.pow(v.get(i+1),2))+3*(Math.cos(2*v.get(i))+Math.sin(2*v.get(i+1)));
         }
         avgTime += System.nanoTime() - start;
         return s;
     }
 
     public double[] range() {
-        double[] r = {-500,500};
+        double[] r = {-32,32};
         return r;
     }
 
     public String name(){
-        return "Rana";
+        return "Ackey's One";
     }
 }

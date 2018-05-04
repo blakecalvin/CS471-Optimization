@@ -21,6 +21,6 @@ public class Schwefel extends FitnessFormula {
     }
 
     public String name(){
-        return "FitnessFormulas.Schwefel";
+        return "Schwefel";
     }
 }

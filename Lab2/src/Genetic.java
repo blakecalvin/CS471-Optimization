@@ -31,7 +31,7 @@ class Genetic extends Algorithm {
         for(int i = 0; i < ns; i++){
             for(int j = 0; j < dim; j++){
                 double r = random(bounds[0], bounds[1]);
-                population.addValue(i, r);
+                population.p.get(i).add(r);
             }
         }
     }
@@ -45,8 +45,8 @@ class Genetic extends Algorithm {
         int t = 1;
 
         while(t <= tMax){
-            Population newP = new Population(ns, dim);
-            for(int s =  1; s <= ns; s+= 2){
+            Population newP = new Population();
+            for(int s =  0; s < ns; s+= 2){
 
                 ArrayList<ArrayList<Double>> parents = select(p);
                 ArrayList<ArrayList<Double>> offspring = crossover(parents.get(0), parents.get(1), cr);
@@ -54,9 +54,11 @@ class Genetic extends Algorithm {
                 mutate(offspring.get(0), m, bounds);
                 mutate(offspring.get(1), m, bounds);
 
-                newP.addSol(offspring.get(0));
-                newP.addSol(offspring.get(1));
+                newP.p.add(offspring.get(0));
+                newP.p.add(offspring.get(1));
+                newP.ns += 2;
             }
+            newP.dim = newP.p.get(0).size();
             newP.evaluate(f);
             reduce(p, newP, elitism);
             getCost(p);
@@ -69,10 +71,10 @@ class Genetic extends Algorithm {
     void getCost(Population p) {
         for(int s = 0; s < ns; s++){
             if(p.f.get(s)>=0){
-                p.c.set(s,(1/(1+p.f.get(s))));
+                p.c.add((1/(1+p.f.get(s))));
             }
             else{
-                p.c.set(s, (1 + Math.abs(p.f.get(s))));
+                p.c.add((1 + Math.abs(p.f.get(s))));
             }
             p.totalCost += p.c.get(s);
         }
@@ -89,12 +91,12 @@ class Genetic extends Algorithm {
 
     ArrayList<Double> selectParent(Population p){
         double r = random(1,p.totalFitness);
-        int s = 1;
-        while(s <= ns && r > 0){
+        int s = 0;
+        while(s < ns-1 && r > 0){
             r -= p.f.get(s);
             s += 1;
         }
-        return p.getSol(s);
+        return p.p.get(s);
     }
 
     ArrayList<ArrayList<Double>> crossover(ArrayList<Double> p1, ArrayList<Double> p2, double cr) {
@@ -121,10 +123,10 @@ class Genetic extends Algorithm {
     }
 
     void reduce(Population p, Population newP, int e){
-        p.quicksort(0, p.size());
-        newP.quicksort(0, newP.size());
+        p.quicksort(0, p.p.size()-1);
+        newP.quicksort(0, newP.p.size()-1);
         for(int i = 0; i < e; i++){
-            newP.replace(e+1-i,p.getSol(i));
+            newP.p.set(e+1-i, p.p.get(i));
             newP.f.set(e+1-i, p.f.get(i));
         }
 
@@ -141,7 +143,7 @@ class Genetic extends Algorithm {
 
     void swapData(Population p, Population newP){
         ArrayList<ArrayList<Double>> tempP = new ArrayList<>();
-        tempP.addAll(p.getP());
+        tempP.addAll(p.p);
         ArrayList<Double> tempF = p.f;
 
         p.f.clear();
@@ -149,10 +151,10 @@ class Genetic extends Algorithm {
         newP.f.clear();
         newP.f.addAll(tempF);
 
-        p.eraseP();
-        p.addAll(newP.getP());
-        newP.eraseP();
-        newP.addAll(tempP);
+        p.p.clear();
+        p.p.addAll(newP.p);
+        newP.p.clear();
+        newP.p.addAll(tempP);
     }
 
     String getName() {

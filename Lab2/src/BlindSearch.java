@@ -4,7 +4,17 @@ import java.util.ArrayList;
 
 class BlindSearch extends Algorithm{
 
-    public ArrayList<Double> calculate(int iterations, FitnessFormula f, int d){
+    private int iterations;
+    private FitnessFormula f;
+    private int d;
+
+    public BlindSearch(int iterations, FitnessFormula f, int d){
+        this.iterations = iterations;
+        this.f = f;
+        this.d = d;
+    }
+
+    public ArrayList<Double> run(){
         ArrayList<Double> argBest = new ArrayList<>();
         double fitness0 = 1000000000;
 

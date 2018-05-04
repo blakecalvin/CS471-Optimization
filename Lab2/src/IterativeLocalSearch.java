@@ -4,7 +4,19 @@ import java.util.ArrayList;
 
 class IterativeLocalSearch extends Algorithm {
 
-    ArrayList<Double> calculate(int iterations, FitnessFormula f, int d) {
+    private int iterations;
+    private FitnessFormula f;
+    private int d;
+    private double delta;
+
+    public IterativeLocalSearch(int iterations, FitnessFormula f, int d, double delta){
+        this.iterations = iterations;
+        this.f = f;
+        this.d = d;
+        this.delta = delta;
+    }
+
+    ArrayList<Double> run() {
 
         ArrayList<Double> argBest = generate(f.range(), d);
         double locBest = f.calculate(argBest, d);
@@ -15,7 +27,7 @@ class IterativeLocalSearch extends Algorithm {
 
         while(iterCount <= iterations){
 
-            argBest = (new LocalSearch()).calculate(iterations, f, d);
+            argBest = (new LocalSearch(iterations, f, d, delta)).run();
             locBest = f.calculate(argBest,d);
 
             if(locBest < fBest){

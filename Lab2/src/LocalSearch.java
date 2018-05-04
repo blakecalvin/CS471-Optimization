@@ -4,9 +4,20 @@ import java.util.ArrayList;
 
 class LocalSearch extends Algorithm{
 
-    private double delta = .25; //Normally .11
+    private double delta; //Normally .11
+    private double precision = .001;
+    private int iterations;
+    private FitnessFormula f;
+    private int d;
 
-    ArrayList<Double> calculate(int iterations, FitnessFormula f, int d) {
+    public LocalSearch(int iterations, FitnessFormula f, int d, double delta){
+        this.iterations = iterations;
+        this.f = f;
+        this.d = d;
+        this.delta = delta;
+    }
+
+    ArrayList<Double> run() {
 
         ArrayList<Double> argBest = generate(f.range(), d);
         fBest = f.calculate(argBest, d);
@@ -19,7 +30,7 @@ class LocalSearch extends Algorithm{
             withinBounds(f, argLoc);
 
             double locFitness = f.calculate(argLoc, d);
-            if(locFitness < fBest){
+            if(locFitness < fBest - precision){
                 argBest = argLoc;
                 tau = true;
                 fBest = locFitness;

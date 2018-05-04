@@ -1,0 +1,15 @@
+---[PARAMETERS]---
+
+[GLOBAL]
+30 = Tests
+
+[ILS & LS]
+.11 = Delta
+
+[GA]
+50 = Number of solutions
+0.80 = Crossover Rate (.8-.95)
+0.05 = Mutation Rate (.05-.1)
+0.01 = Mutation Range
+5.0 = Mutation Precision
+0.2 = Elitism Rate

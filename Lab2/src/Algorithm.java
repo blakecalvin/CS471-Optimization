@@ -5,9 +5,10 @@ import java.util.ArrayList;
 abstract class Algorithm {
 
     double fBest = 0;
+    ArrayList<Double> bestSol;
     int count = 0;
 
-    abstract ArrayList<Double> calculate(int iterations, FitnessFormula f, int d);
+    abstract ArrayList<Double> run();
     abstract String getName();
 
     /*
@@ -34,6 +35,12 @@ abstract class Algorithm {
         }
 
         return result;
+    }
+
+    double random(double min, double max){
+        MTRandom rand = new MTRandom();
+        double r = min + (max - min) * rand.nextDouble();
+        return r;
     }
 
 }

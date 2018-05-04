@@ -76,7 +76,7 @@ public class Population {
     public void evaluate(FitnessFormula fit){
         for(int i = 0; i < ns; i++){
             Double fitness = fit.calculate(p.get(i), dim);
-            f.set(i, fitness);
+            f.add(fitness);
         }
     }
 

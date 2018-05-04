@@ -2,7 +2,7 @@
 
 cd src/
 javac *.java
-javac FitnessFunctions/*.java
+javac FitnessFormulas/*.java
 
 # ------ TEST SECTION -------
 

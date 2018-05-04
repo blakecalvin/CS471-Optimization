@@ -22,6 +22,9 @@ public class Population {
         dim = 0;
         ns = 0;
         p = new ArrayList<>();
+        for(int i = 0; i < ns; i++){
+            p.add(new ArrayList<>());
+        }
         f = new ArrayList<>();
         c = new ArrayList<>();
         bestSolution = new ArrayList<>();
@@ -31,6 +34,9 @@ public class Population {
         this.dim = dim;
         this.ns = ns;
         p = new ArrayList<>();
+        for(int i = 0; i < ns; i++){
+            p.add(new ArrayList<>());
+        }
         f = new ArrayList<>();
         c = new ArrayList<>();
         bestSolution = new ArrayList<>();

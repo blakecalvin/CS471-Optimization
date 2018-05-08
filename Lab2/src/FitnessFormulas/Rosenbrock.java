@@ -21,6 +21,6 @@ public class Rosenbrock extends FitnessFormula {
     }
 
     public String name(){
-        return "FitnessFormulas.Rosenbrock";
+        return "Rosenbrock";
     }
 }

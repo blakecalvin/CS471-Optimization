@@ -21,6 +21,6 @@ public class Pathological extends FitnessFormula {
     }
 
     public String name(){
-        return "FitnessFormulas.Pathological";
+        return "Pathological";
     }
 }

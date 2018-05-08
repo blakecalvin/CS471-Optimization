@@ -5,7 +5,7 @@ import java.util.ArrayList;
 class LocalSearch extends Algorithm{
 
     private double delta; //Normally .11
-    private double precision = .001;
+    private double precision = .01;
     private int iterations;
     private FitnessFormula f;
     private int d;
@@ -67,11 +67,11 @@ class LocalSearch extends Algorithm{
      */
     void withinBounds(FitnessFormula f, ArrayList<Double> arg){
         for(int i = 0; i < arg.size(); i++){
-            if(arg.get(i) < f.range()[0]){
+            if(arg.get(i) < f.range()[0]+precision){
                 arg.set(i, f.range()[0]);
             }
             else if(arg.get(i) > f.range()[1]){
-                arg.set(i, f.range()[1]);
+                arg.set(i, f.range()[1]-precision);
             }
         }
     }

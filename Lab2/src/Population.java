@@ -16,7 +16,9 @@ public class Population {
     public double bestCost;
     public double totalFitness;
     public double bestFitness;
-    public ArrayList<Double> bestSolution;
+    public ArrayList<Double> bestSolutionByCost;
+    public ArrayList<Double> bestSolutionByFit;
+
 
     public Population(){
         dim = 0;
@@ -24,7 +26,8 @@ public class Population {
         p = new ArrayList<>();
         f = new ArrayList<>();
         c = new ArrayList<>();
-        bestSolution = new ArrayList<>();
+        bestSolutionByCost = new ArrayList<>();
+        bestSolutionByFit = new ArrayList<>();
     }
 
     public Population(int ns, int dim){
@@ -36,7 +39,8 @@ public class Population {
         }
         f = new ArrayList<>();
         c = new ArrayList<>();
-        bestSolution = new ArrayList<>();
+        bestSolutionByCost = new ArrayList<>();
+        bestSolutionByFit = new ArrayList<>();
     }
 
     public void evaluate(FitnessFormula fit){
@@ -46,22 +50,24 @@ public class Population {
         }
     }
 
-    public void getBestSolution(){
+    public void getBestSolutionByCost(){
         bestCost = c.get(0);
         for(int i = 1; i < ns; i++){
             if(f.get(i) < bestCost){
                 bestCost = c.get(i);
-                bestSolution = p.get(i);
+                bestSolutionByCost = p.get(i);
             }
         }
     }
-
-    public void getBestFitness(){
+    public void getBestSolutionByFit(){
+        bestSolutionByFit.clear();
         bestFitness = f.get(0);
+        bestSolutionByFit.addAll(p.get(0));
         for(int i = 1; i < ns; i++){
             if(f.get(i) < bestFitness){
+                bestSolutionByFit.clear();
                 bestFitness = f.get(i);
-                bestSolution = p.get(i);
+                bestSolutionByFit.addAll(p.get(i));
             }
         }
     }

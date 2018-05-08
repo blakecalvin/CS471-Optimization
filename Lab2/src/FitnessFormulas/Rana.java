@@ -21,6 +21,6 @@ public class Rana extends FitnessFormula {
     }
 
     public String name(){
-        return "FitnessFormulas.Rana";
+        return "Rana";
     }
 }

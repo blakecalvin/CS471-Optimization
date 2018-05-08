@@ -26,6 +26,6 @@ public class Griewangk extends FitnessFormula {
     }
 
     public String name(){
-        return "FitnessFormulas.Griewangk";
+        return "Griewangk";
     }
 }

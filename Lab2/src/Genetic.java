@@ -45,6 +45,7 @@ class Genetic extends Algorithm {
         int t = 1;
 
         while(t <= tMax){
+            p.c.clear();
             Population newP = new Population();
             for(int s =  0; s < ns; s+= 2){
 
@@ -61,11 +62,13 @@ class Genetic extends Algorithm {
             newP.dim = newP.p.get(0).size();
             newP.evaluate(f);
             reduce(p, newP, elitism);
+
             getCost(p);
-            p.getBestSolution();
+            p.getBestSolutionByCost();
+            t++;
         }
         fBest = p.bestCost; // Might need to change this to bestCost
-        return p.bestSolution;
+        return p.bestSolutionByCost;
     }
 
     void getCost(Population p) {

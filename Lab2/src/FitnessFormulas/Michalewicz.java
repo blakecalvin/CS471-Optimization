@@ -22,6 +22,6 @@ public class Michalewicz extends FitnessFormula {
     }
 
     public String name(){
-        return "FitnessFormulas.Michalewicz";
+        return "Michalewicz";
     }
 }

@@ -7,7 +7,7 @@ javac FitnessFormulas/*.java
 # ------ TEST SECTION -------
 
 # input syntax:
-# java Main [Algorithm] [# of Dimensions] [# of Iterations] [Output file]
+# java Main [Algorithm] [# of Dimensions] [# of Iterations/Generations] [Output file]
 #
 # Algorithms:
 # BS = Blind Search
@@ -16,6 +16,11 @@ javac FitnessFormulas/*.java
 # GA = Genetic Algorithm
 # DE = Differential Evolution
 
-java Main GA 10 100 GA.csv
+echo "ILS 10 100"
+java Main ILS 10 100 ILS.csv
+echo "ILS 20 100"
+java Main ILS 20 100 ILS.csv
+echo "ILS 30 100"
+java Main ILS 30 100 ILS.csv
 
 # ------ TEST SECTION END -------

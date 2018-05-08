@@ -22,6 +22,6 @@ public class Rastrigin extends FitnessFormula {
     }
 
     public String name(){
-        return "FitnessFormulas.Rastrigin";
+        return "Rastrigin";
     }
 }

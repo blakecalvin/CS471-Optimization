@@ -13,3 +13,6 @@
 0.01 = Mutation Range
 5.0 = Mutation Precision
 0.2 = Elitism Rate
+
+[DE]
+0.9 = F

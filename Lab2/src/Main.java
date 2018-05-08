@@ -38,6 +38,9 @@ public class Main {
     private static double mPrecision;
     private static double er;
 
+    private static double F;
+    private static int strategy;
+
 
 
     public static void main(String[] args){
@@ -52,6 +55,10 @@ public class Main {
         iter = Integer.parseInt(args[2]);
         file = args[3];
 
+        if(algorithm.equals("DE")){
+            strategy = strategyChoice();
+        }
+
         createTest();
     }
 
@@ -60,31 +67,34 @@ public class Main {
         parseParameters();
 
         for(FitnessFormula f : list){
-            ArrayList<Double> results = new ArrayList<>();
-            avgTime = 0;
+            if(f.scalable() || dim == 10){
+                ArrayList<Double> results = new ArrayList<>();
+                avgTime = 0;
 
-            switch (algorithm){
-                case "BS":
-                    results = test(new BlindSearch(iter, f, dim), TESTS);
-                    break;
-                case "LS":
-                    results = test(new LocalSearch(iter, f, dim, delta), TESTS);
-                    break;
-                case "ILS":
-                    results = test(new IterativeLocalSearch(iter, f, dim, delta), TESTS);
-                    break;
-                case "GA":
-                    results = test(new Genetic(f, ns, dim, f.range(), iter, cr, mRate, mRange, mPrecision, er), TESTS);
-                    break;
-                case "DE":
-                    results = test(new DifferentialEvolution(), TESTS);
-                    break;
+                switch (algorithm){
+                    case "BS":
+                        results = test(new BlindSearch(iter, f, dim), TESTS);
+                        break;
+                    case "LS":
+                        results = test(new LocalSearch(iter, f, dim, delta), TESTS);
+                        break;
+                    case "ILS":
+                        results = test(new IterativeLocalSearch(iter, f, dim, delta), TESTS);
+                        break;
+                    case "GA":
+                        results = test(new Genetic(f, ns, dim, f.range(), iter, cr, mRate, mRange, mPrecision, er), TESTS);
+                        break;
+                    case "DE":
+                        results = test(new DifferentialEvolution(dim, iter, ns, f, F, cr, f.range(), strategy), TESTS);
+                        break;
+                }
+
+                //get avgTime for results
+                System.out.println(f.name()+": "+results.toString());
+                avgTime = f.avgTime/TESTS;
+
+                export(f.name(), dim, avgTime, results);
             }
-
-            //get avgTime for results
-            avgTime = f.avgTime/TESTS;
-
-            export(f.name(), dim, avgTime, results);
         }
     }
 
@@ -93,7 +103,6 @@ public class Main {
         for(int i = 0; i < iter; i++){
             a.run();
             results.add(a.fBest);
-
             //need to reset all values that could alter calculations
             a.fBest = 0;
         }
@@ -132,6 +141,9 @@ public class Main {
                     case 15:
                         er = s.nextDouble();
                         break;
+                    case 18:
+                        F = s.nextDouble();
+                        break;
                 }
                 counter++;
                 s.nextLine();
@@ -141,6 +153,27 @@ public class Main {
         catch(FileNotFoundException e){
             System.out.println("Error: File not found (\"" + fileName + "\")"  );
         }
+    }
+
+    public static int strategyChoice(){
+        Scanner in = new Scanner(System.in);
+        int input =  0;
+        do{
+            System.out.println("Please choose a mutation strategy:");
+            System.out.println("1: best/1/exp");
+            System.out.println("2: rand/1/exp");
+            System.out.println("3: rand-to-best/1/exp");
+            System.out.println("4: best/2/exp");
+            System.out.println("5: rand/2/exp");
+            System.out.println("6: best/1/bin");
+            System.out.println("7: rand/1/bin");
+            System.out.println("8: rand-to-best/1/bin");
+            System.out.println("9: best/2/bin");
+            System.out.println("10: rand/2/bin");
+            System.out.println("Input corresponding number: ");
+            input = in.nextInt();
+        }while(input <= 0 || input >= 11);
+        return input;
     }
 
     /*

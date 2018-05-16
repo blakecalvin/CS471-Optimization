@@ -1,7 +1,16 @@
+/**
+ @author Blake Calvin
+ CS 471 - Optimization
+ Project 3
+ @date 5/7/18
+ */
 import FitnessFormulas.FitnessFormula;
 
 import java.util.ArrayList;
 
+/**
+ * Iterative Local Search Class
+ */
 class IterativeLocalSearch extends Algorithm {
 
     private int iterations;
@@ -9,6 +18,13 @@ class IterativeLocalSearch extends Algorithm {
     private int d;
     private double delta;
 
+    /**
+     * Initilaizes ILS
+     * @param iterations
+     * @param f
+     * @param d
+     * @param delta
+     */
     public IterativeLocalSearch(int iterations, FitnessFormula f, int d, double delta){
         this.iterations = iterations;
         this.f = f;
@@ -16,6 +32,10 @@ class IterativeLocalSearch extends Algorithm {
         this.delta = delta;
     }
 
+    /**
+     * Runs Local Search iterative until condition is no longer true.
+     * @return
+     */
     ArrayList<Double> run() {
 
         ArrayList<Double> argBest = generate(f.range(), d);
@@ -41,6 +61,10 @@ class IterativeLocalSearch extends Algorithm {
         return globalBest;
     }
 
+    /**
+     * returns name of algorithm
+     * @return
+     */
     String getName() {
         return "Iterative Local Search";
     }

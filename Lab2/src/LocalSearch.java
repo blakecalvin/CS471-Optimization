@@ -1,7 +1,16 @@
+/**
+ @author Blake Calvin
+ CS 471 - Optimization
+ Project 3
+ @date 5/7/18
+ */
 import FitnessFormulas.FitnessFormula;
 
 import java.util.ArrayList;
 
+/**
+ * Local search class
+ */
 class LocalSearch extends Algorithm{
 
     private double delta; //Normally .11
@@ -10,6 +19,13 @@ class LocalSearch extends Algorithm{
     private FitnessFormula f;
     private int d;
 
+    /**
+     * Initializes local search
+     * @param iterations
+     * @param f
+     * @param d
+     * @param delta
+     */
     public LocalSearch(int iterations, FitnessFormula f, int d, double delta){
         this.iterations = iterations;
         this.f = f;
@@ -17,6 +33,10 @@ class LocalSearch extends Algorithm{
         this.delta = delta;
     }
 
+    /**
+     * Runs LS test
+     * @return
+     */
     ArrayList<Double> run() {
 
         ArrayList<Double> argBest = generate(f.range(), d);

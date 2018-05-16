@@ -1,8 +1,8 @@
-/*
-    Blake Calvin
+/**
+    @author Blake Calvin
     CS 471 - Optimization
-    Project 2
-    Last Updated - 4/12/18
+    Project 3
+    @date 5/7/18
  */
 
 import FitnessFormulas.*;
@@ -16,33 +16,34 @@ import java.util.Scanner;
 
 public class Main {
 
-    // All fitness equations
+    //! Initialize all fitness equations
     public static FitnessFormula[] list = {new Schwefel(), new FirstDeJong(), new Rosenbrock(), new Rastrigin(), new Griewangk(),
             new SineEnvelopeSineWave(), new StretchedVSineWave(), new AckeysOne(), new AckeysTwo(), new EggHolder(), new Rana(),
             new Pathological(), new Michalewicz(), new MastersCosineWave(), new ShekelsFoxhole()};
 
     // Parameters
-    private static int TESTS = 30;
-    private static String algorithm;
-    private static int dim;
-    private static int iter;
-    private static String file;
-
-    private static double delta;
-    private static long avgTime;
-
-    private static int ns;
-    private static double cr;
-    private static double mRate;
-    private static double mRange;
-    private static double mPrecision;
-    private static double er;
+    private static int TESTS = 30; //! Number of tests to run
+    private static String algorithm; //! Algorithm choice
+    private static int dim; //! Dimension size
+    private static int iter; //! Number of iterations
+    private static String file; //! output file
+    private static double delta; //! Delta of LS
+    private static long avgTime; //! Average time to complete test
+    private static int ns; //! number of solutions
+    private static double cr; //! Crossover rate
+    private static double mRate; //! mutation rate
+    private static double mRange; //! mutation range
+    private static double mPrecision; //! mutation precision
+    private static double er; //! elitism rate
 
     private static double F;
-    private static int strategy;
+    private static int strategy; //! Mutation strategy
 
 
-
+    /**
+     * Main method called from bash script.
+     * @param args
+     */
     public static void main(String[] args){
 
         if(args.length<4){
@@ -62,6 +63,9 @@ public class Main {
         createTest();
     }
 
+    /**
+     * Creates tests for optimization
+     */
     public static void createTest(){
 
         parseParameters();
@@ -98,6 +102,12 @@ public class Main {
         }
     }
 
+    /**
+     * Runs test on desired alogrithm.
+     * @param a
+     * @param iter
+     * @return Array of results of size iter
+     */
     public static ArrayList<Double> test(Algorithm a, int iter){
         ArrayList<Double> results = new ArrayList<>();
         for(int i = 0; i < iter; i++){
@@ -109,6 +119,10 @@ public class Main {
         return results;
     }
 
+    /**
+     * Parse Parameters
+     * Takes the parameters for all algorithms from the parameters.txt.
+     */
     public static void parseParameters(){
         String fileName = "Parameters.txt";
 
@@ -155,6 +169,11 @@ public class Main {
         }
     }
 
+    /**
+     * strategy choice
+     * Takes user input to determine mutation strategy for DE.
+     * @return input for strategy choice
+     */
     public static int strategyChoice(){
         Scanner in = new Scanner(System.in);
         int input =  0;
@@ -176,11 +195,11 @@ public class Main {
         return input;
     }
 
-    /*
-    Function: export
-    Description: Exports the results from the tests to a csv file for analysis of data.
-    Params: String name, int d, long avgTime, double[] results
-    Return: none
+    /**
+    * export
+    * Exports the results from the tests to a csv file for analysis of data.
+    * @params: String name, int d, long avgTime, double[] results
+    * @return: none
     */
     public static void export(String f, int d, long avgTime, ArrayList<Double> results){
         try{

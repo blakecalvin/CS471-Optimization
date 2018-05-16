@@ -1,20 +1,40 @@
+/**
+ @author Blake Calvin
+ CS 471 - Optimization
+ Project 3
+ @date 5/7/18
+ */
 import FitnessFormulas.FitnessFormula;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GA algorithm class
+ */
 class Genetic extends Algorithm {
 
-    public FitnessFormula f;
-    private int ns;
-    private int dim;
-    private double[] bounds;
-    private int tMax;
-    private double cr;
+    public FitnessFormula f; //! Fitness formula
+    private int ns; //! ns
+    private int dim; //! Dimension size
+    private double[] bounds; //! bounds of f
+    private int tMax; //! max iterations
+    private double cr; //! crossover rate
     private M m;
-    private double er;
+    private double er; //! elitism rate
 
-
+    /**
+     * Initializes GA test
+     * @param f
+     * @param ns
+     * @param dim
+     * @param bounds
+     * @param tMax
+     * @param cr
+     * @param mRate
+     * @param mRange
+     * @param mPrecision
+     * @param er
+     */
     public Genetic(FitnessFormula f, int ns, int dim, double[] bounds, int tMax, double cr, double mRate, double mRange, double mPrecision, double er){
         this.f = f;
         this.ns = ns;
@@ -26,6 +46,11 @@ class Genetic extends Algorithm {
         this.er = er;
     }
 
+    /**
+     * randomly initializes population
+     * @param population
+     * @param bounds
+     */
     void randomInit(Population population, double[] bounds) {
 
         for(int i = 0; i < ns; i++){
@@ -36,6 +61,10 @@ class Genetic extends Algorithm {
         }
     }
 
+    /**
+     * Runs GA test
+     * @return
+     */
     ArrayList<Double> run() {
 
         int elitism = (int)er * ns;
@@ -71,6 +100,10 @@ class Genetic extends Algorithm {
         return p.bestSolutionByCost;
     }
 
+    /**
+     * gets total cost of population
+     * @param p
+     */
     void getCost(Population p) {
         for(int s = 0; s < ns; s++){
             if(p.f.get(s)>=0){
@@ -83,6 +116,11 @@ class Genetic extends Algorithm {
         }
     }
 
+    /**
+     * selects parents for crossover
+     * @param p
+     * @return
+     */
     ArrayList<ArrayList<Double>> select(Population p){
         ArrayList<ArrayList<Double>> r = new ArrayList<>();
         ArrayList<Double> p1 = selectParent(p);
@@ -92,6 +130,11 @@ class Genetic extends Algorithm {
         return r;
     }
 
+    /**
+     * selects parent
+     * @param p
+     * @return
+     */
     ArrayList<Double> selectParent(Population p){
         double r = random(1,p.totalFitness);
         int s = 0;
@@ -102,6 +145,13 @@ class Genetic extends Algorithm {
         return p.p.get(s);
     }
 
+    /**
+     * crossover between two parents
+     * @param p1
+     * @param p2
+     * @param cr
+     * @return
+     */
     ArrayList<ArrayList<Double>> crossover(ArrayList<Double> p1, ArrayList<Double> p2, double cr) {
         ArrayList<ArrayList<Double>> o = new ArrayList<>();
         if(random(0,1)<cr){
@@ -116,6 +166,12 @@ class Genetic extends Algorithm {
         return o;
     }
 
+    /**
+     * mutation of solutions
+     * @param s
+     * @param m
+     * @param bounds
+     */
     void mutate(ArrayList<Double> s, M m, double[] bounds) {
         for(int i = 0; i < dim; i++){
             if(random(0,1) < m.rate){
@@ -125,6 +181,12 @@ class Genetic extends Algorithm {
         }
     }
 
+    /**
+     * combines new population with old population
+     * @param p
+     * @param newP
+     * @param e
+     */
     void reduce(Population p, Population newP, int e){
         p.quicksort(0, p.p.size()-1);
         newP.quicksort(0, newP.p.size()-1);
@@ -137,6 +199,12 @@ class Genetic extends Algorithm {
         swapData(p, newP);
     }
 
+    /**
+     * adds parents to offspring
+     * @param p1
+     * @param p2
+     * @return
+     */
     ArrayList<Double> join(List<Double> p1, List<Double> p2){
         ArrayList<Double> o = new ArrayList<>();
         o.addAll(p1);
@@ -144,6 +212,11 @@ class Genetic extends Algorithm {
         return o;
     }
 
+    /**
+     * swap data of new population and old population
+     * @param p
+     * @param newP
+     */
     void swapData(Population p, Population newP){
         ArrayList<ArrayList<Double>> tempP = new ArrayList<>();
         tempP.addAll(p.p);
@@ -160,15 +233,28 @@ class Genetic extends Algorithm {
         newP.p.addAll(tempP);
     }
 
+    /**
+     * returns name of algorithm
+     * @return
+     */
     String getName() {
         return "Genetic Algorithm";
     }
 
+    /**
+     * Stores Mutation variables
+     */
     class M {
         public double rate;
         public double range;
         public double precision;
 
+        /**
+         * Initializes M class
+         * @param rate
+         * @param range
+         * @param precision
+         */
         public M(double rate, double range, double precision){
             this.rate = rate;
             this.range = range;

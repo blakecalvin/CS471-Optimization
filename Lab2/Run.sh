@@ -16,11 +16,8 @@ javac FitnessFormulas/*.java
 # GA = Genetic Algorithm
 # DE = Differential Evolution
 
-echo "ILS 10 100"
-java Main ILS 10 100 ILS.csv
-echo "ILS 20 100"
-java Main ILS 20 100 ILS.csv
-echo "ILS 30 100"
-java Main ILS 30 100 ILS.csv
+java Main GA 10 100 ILS.csv
+java Main GA 20 100 ILS.csv
+java Main GA 30 100 ILS.csv
 
 # ------ TEST SECTION END -------

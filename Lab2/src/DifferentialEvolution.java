@@ -1,7 +1,16 @@
+/**
+ @author Blake Calvin
+ CS 471 - Optimization
+ Project 3
+ @date 5/7/18
+ */
 import FitnessFormulas.FitnessFormula;
 
 import java.util.ArrayList;
 
+/**
+ * DE Class
+ */
 public class DifferentialEvolution extends Algorithm {
 
     int dim;
@@ -14,6 +23,17 @@ public class DifferentialEvolution extends Algorithm {
     int strategy;
     double lambda;
 
+    /**
+     * Initializes DE Algorithm
+     * @param dim
+     * @param gMax
+     * @param ns
+     * @param ff
+     * @param f
+     * @param cr
+     * @param bounds
+     * @param strategy
+     */
     public DifferentialEvolution(int dim, int gMax,int ns, FitnessFormula ff, double f, double cr, double[] bounds, int strategy){
         this.dim = dim;
         this.gMax = gMax;
@@ -26,6 +46,10 @@ public class DifferentialEvolution extends Algorithm {
         lambda = f/2;
     }
 
+    /**
+     * Runs the DE algorithm on population
+     * @return The best solution vector
+     */
     ArrayList<Double> run() {
 
         Population G = new Population(ns, dim);
@@ -37,6 +61,8 @@ public class DifferentialEvolution extends Algorithm {
         while(g < gMax){
             for(int i = 0; i < ns; i++){
                 ArrayList<Double> u = new ArrayList<>();
+
+                //Randomly generate r1,r2,r3,r4
                 int r1, r2, r3, r4;
                 do{
                     r1 = (int)random(0,ns);
@@ -51,6 +77,7 @@ public class DifferentialEvolution extends Algorithm {
                     r4 = (int)random(0,ns);
                 }while(r4 == r3 || r4 == r2 || r4 == r1 || r4 == i);
 
+                //Chooses mutation strategy
                 switch (strategy){
                     case 1:
                         u = best_1_exp(G, G.p.get(i), r2, r3);
@@ -80,7 +107,7 @@ public class DifferentialEvolution extends Algorithm {
                         u = best_2_bin(G, G.p.get(i), r1, r2, r3, r4);
                         break;
                     case 10:
-                        u = rand_2_exp(G, G.p.get(i), r1, r2, r3, r4, i);
+                        u = rand_2_bin(G, G.p.get(i), r1, r2, r3, r4, i);
                         break;
                 }
                 selection(G, i, u);
@@ -95,6 +122,12 @@ public class DifferentialEvolution extends Algorithm {
         return G.bestSolutionByFit;
     }
 
+    /**
+     * Crossover between noisy vector and Xi
+     * @param x
+     * @param v
+     * @return Arraylist u
+     */
     ArrayList<Double> expCrossover(ArrayList<Double> x, ArrayList<Double> v){
         ArrayList<Double> u = new ArrayList<>();
         u.addAll(x);
@@ -113,6 +146,12 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
+    /**
+     * Crossover between noisy vector and Xi
+     * @param x
+     * @param v
+     * @return Arraylist u
+     */
     ArrayList<Double> binCrossover(ArrayList<Double> x, ArrayList<Double> v){
         ArrayList<Double> u = new ArrayList<>();
         u.addAll(x);
@@ -126,7 +165,14 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#1
+    /**
+     * best_1_exp mutation
+     * @param G
+     * @param x
+     * @param r2
+     * @param r3
+     * @return new solution
+     */
     ArrayList<Double> best_1_exp(Population G, ArrayList<Double> x, int r2, int r3){
         ArrayList<Double> v = new ArrayList<>();
         G.getBestSolutionByFit();
@@ -138,7 +184,15 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#2
+    /**
+     * rand_1_exp mutation
+     * @param G
+     * @param x
+     * @param r1
+     * @param r2
+     * @param r3
+     * @return new solution
+     */
     ArrayList<Double> rand_1_exp(Population G, ArrayList<Double> x, int r1, int r2, int r3){
         ArrayList<Double> v = new ArrayList<>();
 
@@ -149,7 +203,14 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#3
+    /**
+     * randToBest_1_exp mutation
+     * @param G
+     * @param x
+     * @param r1
+     * @param r2
+     * @return new solution
+     */
     ArrayList<Double> randToBest_1_exp(Population G, ArrayList<Double> x, int r1, int r2){
         ArrayList<Double> v = new ArrayList<>();
         G.getBestSolutionByFit();
@@ -162,7 +223,16 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#4
+    /**
+     * best_2_exp mutation
+     * @param G
+     * @param x
+     * @param r1
+     * @param r2
+     * @param r3
+     * @param r4
+     * @return new solution
+     */
     ArrayList<Double> best_2_exp(Population G, ArrayList<Double> x, int r1, int r2, int r3, int r4){
         ArrayList<Double> v = new ArrayList<>();
         G.getBestSolutionByFit();
@@ -174,7 +244,17 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#5
+    /**
+     * rand_2_exp mutation
+     * @param G
+     * @param x
+     * @param r1
+     * @param r2
+     * @param r3
+     * @param r4
+     * @param i
+     * @return new solution
+     */
     ArrayList<Double> rand_2_exp(Population G, ArrayList<Double> x, int r1, int r2, int r3, int r4, int i){
         ArrayList<Double> v = new ArrayList<>();
         int r5;
@@ -189,7 +269,14 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#6
+    /**
+     * best_1_bin mutation
+     * @param G
+     * @param x
+     * @param r2
+     * @param r3
+     * @return new solution
+     */
     ArrayList<Double> best_1_bin(Population G, ArrayList<Double> x, int r2, int r3){
         ArrayList<Double> v = new ArrayList<>();
         G.getBestSolutionByFit();
@@ -201,7 +288,15 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#7
+    /**
+     * rand_1_bin mutation
+     * @param G
+     * @param x
+     * @param r1
+     * @param r2
+     * @param r3
+     * @return new solution
+     */
     ArrayList<Double> rand_1_bin(Population G, ArrayList<Double> x, int r1, int r2, int r3){
         ArrayList<Double> v = new ArrayList<>();
 
@@ -212,7 +307,14 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#8
+    /**
+     * randToBest_1_bin mutation
+     * @param G
+     * @param x
+     * @param r1
+     * @param r2
+     * @return new solution
+     */
     ArrayList<Double> randToBest_1_bin(Population G, ArrayList<Double> x, int r1, int r2){
         ArrayList<Double> v = new ArrayList<>();
         G.getBestSolutionByFit();
@@ -225,7 +327,16 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#9
+    /**
+     * best_2_bin mutation
+     * @param G
+     * @param x
+     * @param r1
+     * @param r2
+     * @param r3
+     * @param r4
+     * @return new solution
+     */
     ArrayList<Double> best_2_bin(Population G, ArrayList<Double> x, int r1, int r2, int r3, int r4){
         ArrayList<Double> v = new ArrayList<>();
         G.getBestSolutionByFit();
@@ -238,7 +349,17 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-    //#10
+    /**
+     * rand_2_bin mutation
+     * @param G
+     * @param x
+     * @param r1
+     * @param r2
+     * @param r3
+     * @param r4
+     * @param i
+     * @return new solution
+     */
     ArrayList<Double> rand_2_bin(Population G, ArrayList<Double> x, int r1, int r2, int r3, int r4, int i){
         ArrayList<Double> v = new ArrayList<>();
         int r5;
@@ -254,13 +375,23 @@ public class DifferentialEvolution extends Algorithm {
         return u;
     }
 
-
+    /**
+     * selects bests solution
+     * @param G
+     * @param i
+     * @param u
+     */
     void selection(Population G, int i, ArrayList<Double> u){
         if(ff.calculate(u, dim) <= G.f.get(i)){
             G.p.set(i, u);
         }
     }
 
+    /**
+     * randomly initializes population
+     * @param population
+     * @param bounds
+     */
     void randomInit(Population population, double[] bounds) {
 
         for(int i = 0; i < ns; i++){
@@ -271,6 +402,10 @@ public class DifferentialEvolution extends Algorithm {
         }
     }
 
+    /**
+     * returns name of algorithm
+     * @return
+     */
     String getName() {
         return "Differential Evolution";
     }
